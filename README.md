@@ -62,3 +62,7 @@ Compute measurements in the paper were taken on one thread of an Intel Core Ultr
   year      = {2026}
 }
 ```
+
+## License
+
+MIT (see `LICENSE`).
