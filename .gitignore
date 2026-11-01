@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+results/episodes/
+results/datasets/
+results/heavy_conf/
+results/smoke/
+results/models/**/*.pkl
+results/models/**/*.pt
+results/runs/traces/
+tables/smoke/
+figures/smoke/
+logs/
+*.aux
+*.log

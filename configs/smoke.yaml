@@ -1,0 +1,40 @@
+# Tiny end-to-end pipeline check. OUTPUTS ARE NOT RESULTS: few seeds, short
+# episodes, under-trained models. Never copy numbers from results/smoke into
+# the paper.
+inherit: configs/matrix.yaml
+
+paths:
+  episodes: results/smoke/episodes
+  datasets: results/smoke/datasets
+  models: results/smoke/models
+  runs: results/smoke/runs
+  heavy_conf: results/smoke/heavy_conf
+  calibration: results/smoke/calibration.json
+  figures: figures/smoke
+  tables: tables/smoke
+
+sim:
+  duration: 40.0
+  deg_window: [15.0, 28.0]
+  nominal_eval_window: [3.0, 15.0]
+
+splits:
+  # smoke seeds are DISJOINT from every seed of the full study (9xxx)
+  train: {worlds: [W1_office, W2_corridor], trajs: [loop, random], seeds: [9000, 9004], events: random, save_images_every: 4}
+  val:   {worlds: [W1_office], trajs: [loop, random], seeds: [9100, 9102], events: random, save_images_every: 4}
+  tune:  {worlds: [W1_office, W2_corridor], trajs: [loop], seeds: [9300, 9302], events: nominal}
+  test:  {worlds: [W1_office, W3_featurepoor], trajs: [loop], seeds: [9200, 9202], events: matrix}
+
+conditions: [nominal, cam.lowlight.3, lidar.dropout.3, lidar.fov.3, imu.bias.2, odom.slip.3,
+             cam.lowlight.3+lidar.fov.3+odom.slip.3+imu.bias.2]
+
+methods: [single_lidar, single_odom, fixed_complementary, ekf, ekf_gate, ekf_iae, rule,
+          learned_lr, learned_gbm, heavy_cnn, oracle, abl_static, abl_w_gate, abl_no_lidar_conf]
+
+showcase:
+  world: W1_office
+  traj: loop
+  seed: 9200
+  conditions: [nominal, cam.lowlight.3, lidar.fov.3, imu.bias.2, odom.slip.3]
+
+smoke: true

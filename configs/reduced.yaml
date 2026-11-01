@@ -1,0 +1,72 @@
+# =============================================================================
+# reduced.yaml -- compute-budgeted version of the full study (inherits matrix.yaml)
+#
+# Same design as matrix.yaml (90 s episodes, degradation in [30,60) s, all
+# worlds incl. held-out W3, both trajectories, both tracks, all 26 methods,
+# same seeds ranges) with smaller samples so the study runs in ~2 h on one
+# laptop (Intel Core Ultra 9 185H, 20 workers, RTX 4070 Laptop for the CNN):
+#   * train 120 episodes (seeds 1000-1029), val 20 (2000-2004), tune 40 (unchanged)
+#   * test: 25 of the 66 conditions x 3 worlds x 2 trajs x 2 seeds (3000-3001)
+#     = 300 episodes, 12 paired blocks per condition
+# Outputs go to the default results/, tables/, figures/ (these ARE the reported
+# results of the reduced study; the paper states the reduction).
+# =============================================================================
+inherit: configs/matrix.yaml
+
+store_cam_frames: true      # keep val/test camera frames -> heavy CNN pass replays them (no re-render)
+
+splits:
+  train:
+    worlds: [W1_office, W2_corridor]
+    trajs: [loop, random]
+    seeds: [1000, 1030]
+    events: random
+    save_images_every: 3
+  val:
+    worlds: [W1_office, W2_corridor]
+    trajs: [loop, random]
+    seeds: [2000, 2005]
+    events: random
+    save_images_every: 3
+  tune:
+    worlds: [W1_office, W2_corridor]
+    trajs: [loop, random]
+    seeds: [1500, 1510]
+    events: nominal
+  test:
+    worlds: [W1_office, W2_corridor, W3_featurepoor]
+    trajs: [loop, random]
+    seeds: [3000, 3002]
+    events: matrix
+
+conditions:
+  - nominal
+  # camera
+  - cam.lowlight.1
+  - cam.lowlight.3
+  - cam.defocus.3
+  - cam.motionblur.3
+  - cam.occlusion.3
+  # LiDAR
+  - lidar.dropout.1
+  - lidar.dropout.3
+  - lidar.fov.3
+  - lidar.rangenoise.3
+  - lidar.sparse.3
+  # IMU
+  - imu.bias.1
+  - imu.bias.2
+  - imu.biasramp.3
+  - imu.vibration.3
+  - imu.noise.3
+  # odometry
+  - odom.slip.1
+  - odom.slip.3
+  - odom.encnoise.3
+  - odom.bumps.3
+  - odom.dropout.1
+  # multi-sensor
+  - cam.lowlight.3+lidar.fov.3
+  - lidar.dropout.2+odom.slip.2
+  - cam.lowlight.2+lidar.dropout.2+odom.slip.2
+  - cam.lowlight.3+lidar.fov.3+odom.slip.3+imu.bias.2

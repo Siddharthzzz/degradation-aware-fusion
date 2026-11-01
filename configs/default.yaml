@@ -1,0 +1,120 @@
+# =============================================================================
+# default.yaml -- all physical / algorithmic parameters of the study.
+# Every number here is an ASSUMPTION or DESIGN CHOICE, not a measured result.
+# Values marked (spec) follow the ROBOTIS TurtleBot3 Waffle Pi / LDS-01
+# documentation; values marked (design) are chosen by the authors and must be
+# reported as such in the paper.
+# =============================================================================
+
+paths:
+  episodes: results/episodes          # cached sensor data per episode (.npz)
+  datasets: results/datasets          # confidence-estimator training data
+  models: results/models              # trained confidence estimators
+  runs: results/runs                  # per-method metric rows + showcase traces
+  heavy_conf: results/heavy_conf      # CNN confidences (re-rendered pass)
+  calibration: results/calibration.json   # nominal R0 fitted on nominal training data
+  figures: figures
+  tables: tables
+
+sim:
+  dt: 0.01                 # s, ground-truth / IMU / filter tick (100 Hz) (design)
+  duration: 90.0           # s per episode (design)
+  deg_window: [30.0, 60.0] # s, degradation active in [on, off) for test episodes (design)
+  nominal_eval_window: [5.0, 30.0]   # s, window used as within-run nominal reference
+
+robot:                     # differential drive, TurtleBot3 Waffle Pi-like
+  wheel_radius: 0.033      # m (spec)
+  wheel_base: 0.287        # m (spec)
+  v_nominal: 0.20          # m/s cruise speed (design; spec max 0.26)
+  v_max: 0.26              # m/s (spec)
+  w_max: 1.82              # rad/s (spec)
+  a_max: 0.4               # m/s^2 (design)
+  alpha_max: 2.5           # rad/s^2 (design)
+  lookahead: 0.35          # m, pure-pursuit lookahead (design)
+  radius_error_std: 0.003  # relative per-wheel radius error per episode (design, cf. Borenstein & Feng 1996)
+  base_error_std: 0.005    # relative wheel-base error per episode (design)
+
+sensors:
+  imu:
+    rate: 100.0            # Hz (design)
+    gyro_noise: 0.003      # rad/s per sample (design; low-cost MEMS class)
+    gyro_bias_init: 0.005  # rad/s, std of initial bias (design)
+    gyro_bias_rw: 0.0002   # rad/s/sqrt(s) (design)
+    acc_noise: 0.05        # m/s^2 per sample (design)
+    acc_bias_init: 0.03    # m/s^2 (design)
+    acc_bias_rw: 0.001     # m/s^2/sqrt(s) (design)
+  odom:
+    rate: 50.0             # Hz (design)
+    ticks_per_rev: 4096    # (spec, Dynamixel XL430 encoder)
+    speed_noise: 0.01      # rad/s additive wheel-speed noise (design)
+  camera:
+    rate: 15.0             # Hz (design)
+    width: 160             # px (design; downsampled RPi Camera v2 stream)
+    height: 96             # px
+    hfov_deg: 62.2         # (spec, RPi Camera v2)
+    mount_height: 0.12     # m, level (zero pitch) camera (design)
+    supersample: 3         # sub-pixel samples per axis (anti-aliasing)
+    wall_height: 1.5       # m (design)
+    ae_target: 0.45        # auto-exposure target mean (design)
+    max_gain: 8.0          # auto-gain limit (design)
+    shot_noise: 0.0001     # variance per unit signal (design)
+    read_noise: 0.004      # std in [0,1] units (design)
+    vo:
+      ipm_x: [0.45, 1.6]   # m, floor patch used by ground-plane VO
+      ipm_y: [-0.55, 0.55]
+      ipm_n: 40
+      gn_iters: 8
+      pyramid_sigmas: [2.0, 0.7]
+  lidar:
+    rate: 5.0              # Hz (spec LDS-01 ~5 Hz)
+    n_beams: 360           # (spec, 1 deg resolution)
+    range_min: 0.12        # m (spec)
+    range_max: 3.5         # m (spec)
+    range_noise: 0.01      # m std (design; spec lists +-10 mm class accuracy)
+    nominal_dropout: 0.01  # fraction of beams randomly missing (design)
+    icp:
+      max_iters: 20
+      reject_dist: [0.5, 0.25, 0.1]    # m, coarse-to-fine correspondence gates
+      huber: 0.05
+      min_inliers: 12
+      grid_res: 0.02                   # m, map nearest-segment lookup
+      map_noise: 0.02                  # m, std of fixed per-world map vertex error (design)
+
+fusion:
+  # Process noise spectral densities (design; held IDENTICAL for all methods)
+  q: {pos: 1.0e-4, th: 1.0e-4, v: 1.0e-3, w: 0.5, a: 0.5, bg: 4.0e-8}
+  p0: {pos: 1.0e-4, th: 1.0e-4, v: 1.0e-3, w: 1.0e-3, a: 1.0e-2, bg: 2.5e-5}
+  # Nominal measurement covariances. OVERWRITTEN by the calibration step
+  # (experiments/02_build_datasets.py -> results/calibration.json), which fits
+  # them to NOMINAL training episodes only.
+  r0:
+    odom: [2.5e-5, 4.0e-4]            # [v, w]
+    cam:  [4.0e-4, 4.0e-3]            # [v, w]
+    imu:  [9.0e-6, 3.5e-3, 3.5e-3]    # [gyro, ax, ay]
+    lidar: [4.0e-4, 4.0e-4, 1.0e-4]   # [x, y, theta]   (map track: scan-to-map pose)
+    lidar_rel: [4.0e-4, 4.0e-3]       # [v, w]          (odometry track: scan-to-scan velocity)
+  weight_function: linear      # linear | power | gate | exp (Ablation 10)
+  weight_power: 2.0
+  weight_gate_tau: 0.5
+  weight_exp_beta: 4.0
+  weight_floor: 0.02           # g(c) below this -> measurement skipped
+  gate_prob: 0.999             # chi-square gate for the gating baseline
+  gate_max_reject_time: 2.0    # s, re-admit sensor after this many s of rejection
+  iae_window: 30               # innovation window (IAE baseline)
+  comp_alpha_lidar: 0.3        # complementary-filter LiDAR blend (Baseline 2)
+
+confidence:
+  label_prob: 0.95             # chi-square quantile defining a "reliable" measurement
+  temporal_tau: 1.0            # s, EMA time constant for temporal features
+  temporal_window: 1.0         # s, rolling-std window
+  families: [lr, rf, gbm, mlp]
+  feature_sets: [static, temporal]
+  rule_z0: 3.0                 # robust z-score where rule-based confidence starts to drop
+  rule_scale: 3.0
+
+evaluation:
+  failure_error: 0.5           # m, position error that counts as failure
+  recovery_hold: 2.0           # s the error must stay below threshold
+  recovery_factor: 1.5         # threshold = max(factor * p95_nominal, p95_nominal + margin)
+  recovery_margin: 0.05        # m
+  rpe_deltas: [1.0, 5.0]       # s

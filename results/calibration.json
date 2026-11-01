@@ -1,0 +1,40 @@
+{
+  "r0": {
+    "cam": [
+      0.0005954205948211312,
+      0.0003166962539853088
+    ],
+    "imu": [
+      8.324623977946824e-06,
+      0.003125008925679404,
+      0.0033985514268655946
+    ],
+    "odom": [
+      6.936797909783885e-07,
+      2.8898082008838695e-05
+    ],
+    "lidar_rel": [
+      0.00018707342726071943,
+      1.3639678987204497e-05
+    ],
+    "lidar": [
+      0.06614885542073437,
+      0.02266679307383526,
+      1.2882809992331017e-05
+    ]
+  },
+  "r0_scale": {
+    "cam": 3.0,
+    "imu": 10.0,
+    "odom": 100.0,
+    "lidar_rel": 1.0,
+    "lidar": 30.0
+  },
+  "source": "r0: train split, uninjected samples, 1% trimmed per-axis variance; r0_scale: coordinate descent on the nominal 'tune' split (plain EKF, both tracks)",
+  "n_samples": {
+    "cam": 150308,
+    "imu": 1010493,
+    "odom": 501707,
+    "lidar_rel": 49068
+  }
+}
