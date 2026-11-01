@@ -1,0 +1,138 @@
+# =============================================================================
+# matrix.yaml -- the full experiment matrix (inherits default.yaml)
+# =============================================================================
+inherit: null
+
+splits:
+  train:                          # confidence-estimator training + R0 calibration
+    worlds: [W1_office, W2_corridor]          # W3 held out entirely
+    trajs: [loop, random]
+    seeds: [1000, 1120]            # range [start, stop): 120 seeds x 2 worlds x 2 trajs = 480 episodes
+    events: random                 # random type / continuous severity / random timing
+    save_images_every: 3           # camera frame pairs kept for the heavy CNN baseline
+  val:                            # model selection, Platt calibration, weight-function choice
+    worlds: [W1_office, W2_corridor]
+    trajs: [loop, random]
+    seeds: [2000, 2015]            # 60 episodes
+    events: random
+    save_images_every: 3
+  tune:                           # nominal-only episodes to tune the shared R inflation (all methods)
+    worlds: [W1_office, W2_corridor]
+    trajs: [loop, random]
+    seeds: [1500, 1510]            # 40 episodes
+    events: nominal
+  test:                           # the ONLY split used for reported results
+    worlds: [W1_office, W2_corridor, W3_featurepoor]
+    trajs: [loop, random]
+    seeds: [3000, 3005]            # 5 seeds x 3 worlds x 2 trajs = 30 paired episodes per condition
+    events: matrix
+
+# Test conditions: '<sensor>.<type>.<level>' joined by '+'; degradation active in sim.deg_window
+conditions:
+  - nominal
+  # camera
+  - cam.lowlight.1
+  - cam.lowlight.2
+  - cam.lowlight.3
+  - cam.lowlight.4        # severe darkness
+  - cam.defocus.1
+  - cam.defocus.2
+  - cam.defocus.3
+  - cam.motionblur.1
+  - cam.motionblur.2
+  - cam.motionblur.3
+  - cam.noise.1
+  - cam.noise.2
+  - cam.noise.3
+  - cam.occlusion.1
+  - cam.occlusion.2
+  - cam.occlusion.3
+  - cam.frozen.1
+  - cam.dropout.1
+  # LiDAR
+  - lidar.dropout.1       # 10 %
+  - lidar.dropout.2       # 30 %
+  - lidar.dropout.3       # 50 %
+  - lidar.dropout.4       # 80 %
+  - lidar.rangenoise.1
+  - lidar.rangenoise.2
+  - lidar.rangenoise.3
+  - lidar.fov.1
+  - lidar.fov.2
+  - lidar.fov.3
+  - lidar.sparse.1
+  - lidar.sparse.2
+  - lidar.sparse.3
+  - lidar.blackout.1
+  # IMU
+  - imu.noise.1
+  - imu.noise.2
+  - imu.noise.3
+  - imu.bias.1
+  - imu.bias.2
+  - imu.bias.3
+  - imu.biasramp.1
+  - imu.biasramp.2
+  - imu.biasramp.3
+  - imu.vibration.1
+  - imu.vibration.2
+  - imu.vibration.3
+  - imu.stuck.1
+  - imu.dropout.1
+  # odometry
+  - odom.slip.1
+  - odom.slip.2
+  - odom.slip.3
+  - odom.encnoise.1
+  - odom.encnoise.2
+  - odom.encnoise.3
+  - odom.bumps.1
+  - odom.bumps.2
+  - odom.bumps.3
+  - odom.stuck.1
+  - odom.dropout.1
+  # multi-sensor
+  - cam.lowlight.2+lidar.dropout.2
+  - cam.lowlight.3+lidar.fov.3
+  - cam.lowlight.2+odom.slip.2
+  - cam.lowlight.3+odom.slip.3
+  - lidar.dropout.2+odom.slip.2
+  - lidar.fov.3+odom.slip.3
+  - cam.lowlight.2+lidar.dropout.2+odom.slip.2
+  - cam.lowlight.3+lidar.fov.3+odom.slip.3+imu.bias.2
+
+tracks: [map, odom]
+
+methods:          # evaluated on every test episode and both tracks
+  - single_lidar
+  - single_odom
+  - single_cam
+  - single_imu
+  - fixed_complementary
+  - ekf
+  - ekf_gate
+  - ekf_iae
+  - rule
+  - learned_lr
+  - learned_rf
+  - learned_gbm
+  - learned_mlp
+  - heavy_cnn
+  - oracle
+  - abl_no_cam_conf
+  - abl_no_lidar_conf
+  - abl_no_imu_conf
+  - abl_no_odom_conf
+  - abl_static
+  - abl_w_power
+  - abl_w_gate
+  - abl_w_exp
+  - abl_conf_complementary
+  - abl_conf_plus_gate
+
+showcase:         # episodes whose full traces are stored for Figs. 3-10
+  world: W1_office
+  traj: loop
+  seed: 3000
+  conditions: [nominal, cam.lowlight.3, lidar.dropout.3, lidar.fov.3, imu.bias.2, odom.slip.3,
+               cam.lowlight.3+lidar.fov.3+odom.slip.3+imu.bias.2]

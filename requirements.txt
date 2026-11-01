@@ -1,0 +1,10 @@
+numpy>=2.0
+scipy>=1.13
+scikit-learn>=1.5
+pandas>=2.2
+matplotlib>=3.9
+pyyaml>=6.0
+pytest>=8.0
+# Optional (Baseline 5, heavy neural confidence):
+# torch>=2.3
+# torchvision>=0.18

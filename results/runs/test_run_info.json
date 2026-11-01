@@ -1,0 +1,85 @@
+{
+  "selection": {
+    "family": "mlp",
+    "feature_set": "temporal",
+    "weight": "gate",
+    "single_best": {
+      "map": "single_lidar",
+      "odom": "single_lidar"
+    },
+    "rule": "pre-registered: mean val log(pos RMSE), ties<0.01 -> fewer params",
+    "val_scores": {
+      "cand_gbm_static": -3.026046360689428,
+      "cand_gbm_temporal": -3.088028808928387,
+      "cand_lr_static": -2.9751023027687724,
+      "cand_lr_temporal": -3.027303681956762,
+      "cand_mlp_static": -3.2033698301112197,
+      "cand_mlp_temporal": -3.3271587228811486,
+      "cand_rf_static": -3.2455001378628965,
+      "cand_rf_temporal": -2.991432193659252,
+      "single_cam": -1.1625345398004876,
+      "single_imu": 2.800851061300637,
+      "single_lidar": -2.5307131579624924,
+      "single_odom": -1.308115107949107
+    },
+    "val_weight_scores": {
+      "w_gate": -3.395065601338783,
+      "w_power": -3.3668045703806966,
+      "w_exp": -3.3443703629542467,
+      "w_linear": -3.3271587228811486
+    }
+  },
+  "methods": [
+    "single_lidar",
+    "single_odom",
+    "single_cam",
+    "single_imu",
+    "fixed_complementary",
+    "ekf",
+    "ekf_gate",
+    "ekf_iae",
+    "rule",
+    "learned_lr",
+    "learned_rf",
+    "learned_gbm",
+    "learned_mlp",
+    "heavy_cnn",
+    "oracle",
+    "abl_no_cam_conf",
+    "abl_no_lidar_conf",
+    "abl_no_imu_conf",
+    "abl_no_odom_conf",
+    "abl_static",
+    "abl_w_power",
+    "abl_w_gate",
+    "abl_w_exp",
+    "abl_conf_complementary",
+    "abl_conf_plus_gate",
+    "proposed"
+  ],
+  "r0": {
+    "cam": [
+      0.0005954205948211312,
+      0.0003166962539853088
+    ],
+    "imu": [
+      8.324623977946824e-06,
+      0.003125008925679404,
+      0.0033985514268655946
+    ],
+    "odom": [
+      6.936797909783885e-07,
+      2.8898082008838695e-05
+    ],
+    "lidar_rel": [
+      0.00018707342726071943,
+      1.3639678987204497e-05
+    ],
+    "lidar": [
+      0.06614885542073437,
+      0.02266679307383526,
+      1.2882809992331017e-05
+    ]
+  },
+  "r0_source": "C:\\conference papers\\pcds\\senosrfail\\results\\calibration.json"
+}

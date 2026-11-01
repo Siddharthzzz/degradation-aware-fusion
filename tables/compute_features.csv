@@ -1,0 +1,5 @@
+item,median_us,p95_us
+camera image features / frame,1336.7499996093102,1482.8050007963611
+LiDAR scan features / scan,81.10000089800451,118.01499986177078
+all batch features / measurement (amortised),2.8674183006550935,
+temporal augmentation / IMU sample,28.453127430267646,

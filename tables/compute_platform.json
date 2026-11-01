@@ -1,0 +1,8 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+  "python": "3.13.3",
+  "cpu_count": 22,
+  "torch": "2.7.1+cu118",
+  "cuda": "NVIDIA GeForce RTX 4070 Laptop GPU"
+}
