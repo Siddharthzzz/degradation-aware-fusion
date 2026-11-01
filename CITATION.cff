@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation"
+type: software
+license: MIT
+version: v1.0-pcds2026
+doi: 10.5281/zenodo.23863199
+repository-code: "https://github.com/Siddharthzzz/degradation-aware-fusion"
+authors:
+  - given-names: Manda
+    family-names: Siddharth
+    affiliation: Mahindra University
+  - given-names: Akhil Varun Varma
+    family-names: Kalidindi
+    affiliation: Mahindra University
+  - given-names: Rishi
+    family-names: Kamishetty
+    affiliation: Mahindra University
+  - given-names: Bilakanti Mukesh
+    family-names: Reddy
+    affiliation: Mahindra University
+  - given-names: Lakshmi Pavan
+    family-names: Rangisetti
+    affiliation: Mahindra University
+  - given-names: Veeraiah
+    family-names: Talagondapati
+    affiliation: Mahindra University
