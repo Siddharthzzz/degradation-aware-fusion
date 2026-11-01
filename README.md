@@ -55,7 +55,7 @@ Compute measurements in the paper were taken on one thread of an Intel Core Ultr
 ```bibtex
 @inproceedings{siddharth2026degradation,
   author    = {Manda Siddharth and Akhil Varun Varma Kalidindi and Rishi Kamishetty and
-               Bilakanti Mukesh Reddy and Lakshmi Pavan Rangisetti and Veeraiah Talagondapati},
+               Bilakanti, Mukesh Reddy and Lakshmi Pavan Rangisetti and Veeraiah Talagondapati},
   title     = {Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation
                for Resource-Constrained Mobile Robots},
   booktitle = {Proc. PCDS},
