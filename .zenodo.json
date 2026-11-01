@@ -1,0 +1,16 @@
+{
+  "title": "Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation: code for the PCDS 2026 paper",
+  "description": "Code for the paper \"Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation for Resource-Constrained Mobile Robots\" (PCDS 2026). Calibrated per-measurement confidence estimators adapt the EKF measurement covariance under camera, LiDAR, IMU and wheel-odometry degradation. Includes the simulator, degradation generators, front-ends, quality features, estimators, confidence-aware EKF and baselines, evaluation and statistics scripts, configurations with all random seeds, and the tables and figures of the reported run. Simulation-only study.",
+  "upload_type": "software",
+  "license": "MIT",
+  "access_right": "open",
+  "creators": [
+    {"name": "Siddharth, Manda", "affiliation": "Mahindra University"},
+    {"name": "Kalidindi, Akhil Varun Varma", "affiliation": "Mahindra University"},
+    {"name": "Kamishetty, Rishi", "affiliation": "Mahindra University"},
+    {"name": "Reddy, Bilakanti Mukesh", "affiliation": "Mahindra University"},
+    {"name": "Rangisetti, Lakshmi Pavan", "affiliation": "Mahindra University"},
+    {"name": "Talagondapati, Veeraiah", "affiliation": "Mahindra University"}
+  ],
+  "keywords": ["robotics", "sensor fusion", "extended Kalman filter", "localization", "uncertainty estimation", "calibration", "edge AI", "mobile robots"]
+}
