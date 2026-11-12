@@ -1,5 +1,7 @@
 # Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23863199.svg)](https://doi.org/10.5281/zenodo.23863199)
+
 Code for the paper *"Degradation-Aware Multi-Sensor Fusion with Lightweight Confidence Estimation for Resource-Constrained Mobile Robots"* (PCDS 2026).
 
 Lightweight, Platt-calibrated per-measurement confidence estimators map causal sensor-quality features (camera, 2-D LiDAR, IMU, wheel odometry, and cross-sensor consistency) to a confidence. That confidence scales or gates the measurement covariance of an extended Kalman filter (EKF): `R_eff = kappa * R0 / g(c)`. The study is **simulation-only**.
@@ -51,6 +53,8 @@ All random seeds are set in the configuration files. The pipeline regenerates th
 Compute measurements in the paper were taken on one thread of an Intel Core Ultra 9 185H (heavy model also on an RTX 4070 Laptop GPU) with scikit-learn and PyTorch. No embedded board was used.
 
 ## Citation
+
+The code is archived on Zenodo: [doi:10.5281/zenodo.23863199](https://doi.org/10.5281/zenodo.23863199). If you use it, please cite the paper:
 
 ```bibtex
 @inproceedings{siddharth2026degradation,
